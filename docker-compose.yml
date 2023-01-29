@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  jenkins:
+    container_name: jenkins
+    image: jenkins/jenkins
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/home/remote-host/docker:/var/docker"
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - net
+  git:
+    container_name: gitlab
+    image: 'gitlab/gitlab-ee:latest'
+    hostname: 'gitlab.example.com'
+    ports:
+      - '8081:80'
+    volumes:
+      - '$GITLAB_HOME/config:/etc/gitlab'
+      - '$GITLAB_HOME/logs:/var/log/gitlab'
+      - '$GITLAB_HOME/data:/var/opt/gitlab'
+    networks:
+      - net
+  python:
+    container_name: deploy
+    image: 'python:3.8'
+    networks:
+      - net
+  centos:
+    container_name: centos7
+    image: 'centos:7'
+    networks:
+      - net
+networks:
+  net:
+

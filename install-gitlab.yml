@@ -1,0 +1,16 @@
+- name: gitlab image
+  hosts: remote-server
+  gather_facts: no
+  become: true
+  
+  tasks: 
+    - name: Pull  gitlab image
+      docker_image:
+        name: 'gitlab/gitlab-ee:latest'
+        source: pull
+
+    - name: Create gitlab
+      docker_container:
+        name: gitlab
+        image: 'gitlab/gitlab-ee:latest'
+        state: present
